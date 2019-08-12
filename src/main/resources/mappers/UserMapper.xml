@@ -223,5 +223,23 @@
   <update id="updateMobileByUserId">
     update tb_user set mobile = #{mobile} where id = #{id}
   </update>
+  <!--获取用户详情-->
+  <select id="findUserDTOByUserId" parameterType="Long" resultMap="UserDTOMap">
+    select u.id,u.name,u.create_date,
+    a.id address_id,a.country
+    from tb_user u
+    left join tb_address a on u.address_id = a.id
+    where u.id = #{id}
+  </select>
+
+  <resultMap id="UserDTOMap" type="com.thizgroup.mybatis.study.dto.UserDTO">
+    <id property="id" column="id" javaType="Long" jdbcType="BIGINT"/>
+    <result property="name" column="name" javaType="String" jdbcType="VARCHAR"/>
+    <result property="createDate" column="create_date" javaType="java.util.Date" jdbcType="TIMESTAMP"/>
+    <association property="addressDTO" javaType="com.thizgroup.mybatis.study.dto.AddressDTO">
+      <id property="id" column="address_id" javaType="Long" jdbcType="BIGINT"/>
+      <result property="country" column="country" javaType="String" jdbcType="VARCHAR"/>
+    </association>
+  </resultMap>
 
 </mapper>

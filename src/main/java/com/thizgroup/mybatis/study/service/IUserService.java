@@ -28,4 +28,6 @@ public interface IUserService {
 
   int updateMobileByUserId(Long id,String mobile);
 
+  UserDTO findUserDTOByUserId(Long id);
+
 }

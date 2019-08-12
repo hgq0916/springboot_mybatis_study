@@ -114,4 +114,10 @@ public class UserServiceImplTest {
     System.out.println("affect counts:"+userService.updateMobileByUserId(4L,"15134567890"));
   }
 
+  @Test
+  public void findUserDTOByUserId(){
+    UserDTO userDTO = userService.findUserDTOByUserId(4L);
+    System.out.println(userDTO);
+  }
+
 }

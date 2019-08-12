@@ -55,6 +55,8 @@ public interface UserMapper {
 
     int updateMobileByUserId(@Param("id") Long id,@Param("mobile") String mobile);
 
+    UserDTO findUserDTOByUserId(@Param("id") Long id);
+
     class UserMapperProvider {
 
         public String findUserListByCondition(UserDTO userDTO){
