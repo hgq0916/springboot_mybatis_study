@@ -39,7 +39,8 @@ public class UserServiceImpl implements IUserService {
 
   @Override
   public List<UserDTO> findAll(UserDTO searchDTO, Sorter... sorters) {
-    UserExample example = new UserExample();
+    //方式一：
+    /*UserExample example = new UserExample();
     if(searchDTO != null){
       Criteria criteria = example.createCriteria();
       if(!StringUtils.isEmpty(searchDTO.getName())){
@@ -53,9 +54,10 @@ public class UserServiceImpl implements IUserService {
         orderString.append(" ").append(sorter.toString()).append(" ");
       }
       example.setOrderByClause(orderString.toString());
-    }
-
-    List<User> userList = userMapper.selectByExample(example);
+      List<User> userList = userMapper.selectByExample(example);
+    }*/
+    //方式二：
+    List<User> userList = userMapper.findUserListByCondition(searchDTO);
     userList = userList == null ? new ArrayList<>() : userList;
     List<UserDTO> userDTOS = userList.stream().map( user -> convertEntityToDto(user)
     ).collect(Collectors.toList());

@@ -1,14 +1,17 @@
 package com.thizgroup.mybatis.study.mapper;
 
+import com.thizgroup.mybatis.study.dto.UserDTO;
 import com.thizgroup.mybatis.study.entity.User;
 import com.thizgroup.mybatis.study.entity.UserExample;
 import java.util.List;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.SelectKey;
+import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Repository;
 
@@ -30,6 +33,10 @@ public interface UserMapper {
         + " #{name},#{email},#{mobile},#{birthday},#{age},#{addressId},#{createDate},#{modifyDate} )")
     int addUser(User user);
 
+    //注解动态sql开发
+    @SelectProvider(type = UserMapperProvider.class,method = "findUserListByCondition")
+    List<User> findUserListByCondition(UserDTO userDTO);
+
     long countByExample(UserExample example);
 
     int deleteByExample(UserExample example);
@@ -44,5 +51,18 @@ public interface UserMapper {
         @Param("example") UserExample example);
 
     int updateByExample(@Param("record") User record, @Param("example") UserExample example);
+
+    class UserMapperProvider {
+
+        public String findUserListByCondition(UserDTO userDTO){
+            StringBuffer sql = new StringBuffer(" select * from tb_user where 1=1 ");
+            if(userDTO != null){
+                if(StringUtils.isNotBlank(userDTO.getName())){
+                    sql.append(" and name like CONCAT('%',CONCAT(#{name},'%')) ");
+                }
+            }
+            return sql.toString();
+        }
+    }
 
 }
