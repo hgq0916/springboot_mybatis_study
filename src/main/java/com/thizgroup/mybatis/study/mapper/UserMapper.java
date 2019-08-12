@@ -13,6 +13,7 @@ import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.SelectKey;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.jdbc.SQL;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -55,13 +56,25 @@ public interface UserMapper {
     class UserMapperProvider {
 
         public String findUserListByCondition(UserDTO userDTO){
-            StringBuffer sql = new StringBuffer(" select * from tb_user where 1=1 ");
+          //方式一：
+           /* StringBuffer sql = new StringBuffer(" select * from tb_user where 1=1 ");
             if(userDTO != null){
                 if(StringUtils.isNotBlank(userDTO.getName())){
                     sql.append(" and name like CONCAT('%',CONCAT(#{name},'%')) ");
                 }
             }
-            return sql.toString();
+            return sql.toString();*/
+           //方式二：
+          return new SQL() {{
+            SELECT("*");
+            FROM("tb_user").WHERE("1=1");
+            if(StringUtils.isNotBlank(userDTO.getName())){
+              //这个where呢，会自动帮你加and语句
+              //比如 上面的where("1==1") 会在后面给你加一个and  实现了多条线嘛
+              WHERE("name like CONCAT('%',CONCAT(#{name},'%'))");
+            }
+            //从这个toString可以看出，其内部使用高效的StringBuilder实现SQL拼接
+          }}.toString();
         }
     }
 
