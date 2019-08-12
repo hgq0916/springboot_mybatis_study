@@ -1,13 +1,17 @@
 package com.thizgroup.mybatis.study.entity;
 
 import java.util.Date;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
 public class User {
     private Long id;
 
     private String name;
 
-    private Short age;
+    private Integer age;
 
     private Date birthday;
 
@@ -37,11 +41,11 @@ public class User {
         this.name = name == null ? null : name.trim();
     }
 
-    public Short getAge() {
+    public Integer getAge() {
         return age;
     }
 
-    public void setAge(Short age) {
+    public void setAge(Integer age) {
         this.age = age;
     }
 
@@ -92,4 +96,19 @@ public class User {
     public void setModifyDate(Date modifyDate) {
         this.modifyDate = modifyDate;
     }
+
+    @Builder(toBuilder = true)
+    public User(Long id, String name, Integer age, Date birthday, String email, String mobile,
+        Long addressId) {
+        this.id = id;
+        this.name = name;
+        this.age = age;
+        this.birthday = birthday;
+        this.email = email;
+        this.mobile = mobile;
+        this.addressId = addressId;
+        this.createDate = createDate;
+        this.modifyDate = modifyDate;
+    }
+
 }

@@ -1,6 +1,7 @@
 package com.thizgroup.mybatis.study.service.impl;
 
 import com.github.pagehelper.PageHelper;
+import com.thizgroup.mybatis.study.dto.AddressDTO;
 import com.thizgroup.mybatis.study.dto.PageBean;
 import com.thizgroup.mybatis.study.dto.Sorter;
 import com.thizgroup.mybatis.study.dto.UserDTO;
@@ -8,14 +9,17 @@ import com.thizgroup.mybatis.study.entity.User;
 import com.thizgroup.mybatis.study.entity.UserExample;
 import com.thizgroup.mybatis.study.entity.UserExample.Criteria;
 import com.thizgroup.mybatis.study.mapper.UserMapper;
+import com.thizgroup.mybatis.study.service.IAddressService;
 import com.thizgroup.mybatis.study.service.IUserService;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
 /**
@@ -30,6 +34,8 @@ public class UserServiceImpl implements IUserService {
 
   @Autowired
   private UserMapper userMapper;
+  @Autowired
+  private IAddressService addressService;
 
   @Override
   public List<UserDTO> findAll(UserDTO searchDTO, Sorter... sorters) {
@@ -51,19 +57,7 @@ public class UserServiceImpl implements IUserService {
 
     List<User> userList = userMapper.selectByExample(example);
     userList = userList == null ? new ArrayList<>() : userList;
-    List<UserDTO> userDTOS = userList.stream().map(
-        user ->
-            UserDTO.builder()
-                .id(user.getId())
-                .name(user.getName())
-                .age(user.getAge())
-                .birthday(user.getBirthday())
-                .addressId(user.getAddressId())
-                .createDate(user.getCreateDate())
-                .email(user.getEmail())
-                .mobile(user.getMobile())
-                .modifyDate(user.getModifyDate())
-                .build()
+    List<UserDTO> userDTOS = userList.stream().map( user -> convertEntityToDto(user)
     ).collect(Collectors.toList());
     return userDTOS;
   }
@@ -81,4 +75,97 @@ public class UserServiceImpl implements IUserService {
     page.setTotalPages(startPage.getPages());
     return page;
   }
+
+  @Override
+  public UserDTO findUserById(Long id) {
+    return convertEntityToDto(findUserEntityById(id));
+  }
+
+  private User findUserEntityById(Long id) {
+    UserExample example = new UserExample();
+    Criteria criteria = example.createCriteria();
+    criteria.andIdEqualTo(id);
+    List<User> users = userMapper.selectByExample(example);
+    if(users != null && users.size()>0) {
+      User user = users.get(0);
+      return user;
+    }
+    return null;
+  }
+
+  @Override
+  public void deleteUserById(Long id) {
+    UserDTO userDTO = findUserById(id);
+    if(userDTO == null) throw new RuntimeException("用户不存在");
+    UserExample example = new UserExample();
+    example.createCriteria().andIdEqualTo(id);
+    userMapper.deleteByExample(example);
+  }
+
+  @Override
+  public UserDTO saveOrUpdateUser(UserDTO userDTO) {
+    //数据校验 todo
+    AddressDTO addressDTO = null;
+    if(userDTO.getAddressDTO()!=null){
+      addressDTO = addressService.saveOrUpdateAddress(userDTO.getAddressDTO());
+    }
+    userDTO.setAddressDTO(addressDTO);
+
+    //保存用户信息
+    User user = convertDtoToEntity(userDTO);
+
+    if(user.getId() == null){
+      //保存
+      user.setCreateDate(new Date());
+      user.setModifyDate(new Date());
+      userMapper.insert(user);
+    }else {
+      //更新
+      User userOld = findUserEntityById(user.getId());
+      if(userOld == null) throw new RuntimeException("user not found");
+      userOld.setAddressId(user.getAddressId());
+      userOld.setAge(user.getAge());
+      userOld.setBirthday(user.getBirthday());
+      userOld.setEmail(user.getEmail());
+      userOld.setMobile(user.getMobile());
+      userOld.setName(user.getName());
+      //更新时间
+      userOld.setModifyDate(new Date());
+      UserExample example = new UserExample();
+      example.createCriteria().andIdEqualTo(user.getId());
+      userMapper.updateByExample(userOld,example);
+      user = userOld;
+    }
+
+    return convertEntityToDto(user);
+  }
+
+  private User convertDtoToEntity(UserDTO userDTO) {
+    Assert.notNull(userDTO,"userDTO cannot be null");
+    return User.builder()
+        .id(userDTO.getId())
+        .name(userDTO.getName())
+        .age(userDTO.getAge())
+        .birthday(userDTO.getBirthday())
+        .addressId(userDTO.getAddressDTO() == null ? null : userDTO.getAddressDTO().getId())
+        .email(userDTO.getEmail())
+        .mobile(userDTO.getMobile())
+        .build();
+  }
+
+  private UserDTO convertEntityToDto(User user) {
+    return user == null ? null : UserDTO.builder()
+        .id(user.getId())
+        .name(user.getName())
+        .mobile(user.getMobile())
+        .email(user.getEmail())
+        .addressDTO(user.getAddressId()== null?null:
+            AddressDTO.builder().id(user.getAddressId()).build())
+        .birthday(user.getBirthday())
+        .createDate(user.getCreateDate())
+        .modifyDate(user.getModifyDate())
+        .age(user.getAge())
+        .build();
+  }
+
 }

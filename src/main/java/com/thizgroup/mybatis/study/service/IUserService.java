@@ -18,4 +18,10 @@ public interface IUserService {
 
   PageBean<UserDTO> findUserListByPage(UserDTO searchDTO, PageRequest pageRequest);
 
+  UserDTO findUserById(Long id);
+
+  void deleteUserById(Long id);
+
+  UserDTO saveOrUpdateUser(UserDTO userDTO);
+
 }

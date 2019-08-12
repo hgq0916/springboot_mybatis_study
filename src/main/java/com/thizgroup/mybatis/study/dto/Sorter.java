@@ -18,7 +18,7 @@ public class Sorter {
   private final Order order;
 
   public String toString(){
-    return this.name+" "+order.name();
+    return this.name+" "+order.getName();
   }
 
   private Sorter(String name,Sorter.Order order){

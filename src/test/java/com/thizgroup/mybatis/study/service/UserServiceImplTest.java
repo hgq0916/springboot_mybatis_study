@@ -1,17 +1,21 @@
 package com.thizgroup.mybatis.study.service;
 
 import com.thizgroup.mybatis.study.MybatisStudyApplication;
+import com.thizgroup.mybatis.study.dto.AddressDTO;
 import com.thizgroup.mybatis.study.dto.PageBean;
 import com.thizgroup.mybatis.study.dto.PageRequest;
 import com.thizgroup.mybatis.study.dto.Sorter;
 import com.thizgroup.mybatis.study.dto.Sorter.Order;
 import com.thizgroup.mybatis.study.dto.UserDTO;
+import com.thizgroup.mybatis.study.utils.DateUtils;
 import java.util.ArrayList;
 import java.util.List;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -53,7 +57,49 @@ public class UserServiceImplTest {
     userListByPage.getData().forEach(u-> System.out.println(u));
   }
 
-  public static void main(String[] args) {
-    System.out.println(args);
+  @Test
+  public void findUserByIdTest(){
+    UserDTO userDTO = userService.findUserById(2L);
+    System.out.println(userDTO);
+    Assert.assertEquals(userDTO.getId().longValue(),2L);
   }
+
+  @Test
+  public void deleteUserByIdTest(){
+    userService.deleteUserById(1L);
+  }
+
+  @Test
+  //@Rollback(value = false)
+  public void saveOrUpdateUserTest(){
+    UserDTO userDTO = UserDTO.builder()
+        .name("王五")
+        .age(30)
+        .birthday(DateUtils.parse("2012-08-08 12:12:12", "YYYY-MM-dd HH:mm:ss"))
+        .email("wangwu@126.com")
+        .mobile("18789786789")
+        .addressDTO(null)
+        .build();
+    userService.saveOrUpdateUser(userDTO);
+  }
+
+  @Test
+  //@Rollback(value = false)
+  public void saveOrUpdateUserTest2(){
+    AddressDTO adddressDTO = new AddressDTO();
+    adddressDTO.setCountry("中国");
+    adddressDTO.setProvince("河南");
+    adddressDTO.setCity("郑州");
+    UserDTO userDTO = UserDTO.builder()
+        .id(4L)
+        .name("王五")
+        .age(30)
+        .birthday(DateUtils.parse("2012-08-08 12:12:12", "YYYY-MM-dd HH:mm:ss"))
+        .email("wangwu@126.com")
+        .mobile("18789786789")
+        .addressDTO(adddressDTO)
+        .build();
+    userService.saveOrUpdateUser(userDTO);
+  }
+
 }

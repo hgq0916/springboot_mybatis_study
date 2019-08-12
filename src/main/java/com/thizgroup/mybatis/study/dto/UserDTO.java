@@ -22,7 +22,7 @@ public class UserDTO {
 
   private String name;
 
-  private Short age;
+  private Integer age;
 
   private Date birthday;
 
@@ -30,9 +30,9 @@ public class UserDTO {
 
   private String mobile;
 
-  private Long addressId;
-
   private Date createDate;
 
   private Date modifyDate;
+
+  private AddressDTO addressDTO;
 }
