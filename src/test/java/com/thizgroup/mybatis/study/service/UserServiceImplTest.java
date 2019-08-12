@@ -42,7 +42,7 @@ public class UserServiceImplTest {
   @Test
   public void findUserListByPageTest(){
     UserDTO userDTO = new UserDTO();
-    //userDTO.setName("张");
+    userDTO.setName("张");
     PageBean<UserDTO> userListByPage = userService.findUserListByPage(userDTO,
         PageRequest.of(1, 5,Sorter.of("create_date", Order.ASC)));
     System.out.println("总记录数："+userListByPage.getTotalCount());
