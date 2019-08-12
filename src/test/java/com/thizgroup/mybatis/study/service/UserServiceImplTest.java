@@ -66,18 +66,18 @@ public class UserServiceImplTest {
 
   @Test
   public void deleteUserByIdTest(){
-    userService.deleteUserById(1L);
+    userService.deleteUserById(4L);
   }
 
   @Test
   //@Rollback(value = false)
   public void saveOrUpdateUserTest(){
     UserDTO userDTO = UserDTO.builder()
-        .name("王五")
-        .age(30)
-        .birthday(DateUtils.parse("2012-08-08 12:12:12", "YYYY-MM-dd HH:mm:ss"))
-        .email("wangwu@126.com")
-        .mobile("18789786789")
+        .name("赵六")
+        .age(32)
+        .birthday(DateUtils.parse("2013-08-08 12:12:12", "YYYY-MM-dd HH:mm:ss"))
+        .email("zhaoliu@126.com")
+        .mobile("18589786789")
         .addressDTO(null)
         .build();
     userService.saveOrUpdateUser(userDTO);
@@ -100,6 +100,12 @@ public class UserServiceImplTest {
         .addressDTO(adddressDTO)
         .build();
     userService.saveOrUpdateUser(userDTO);
+  }
+
+  @Test
+  //@Rollback(value = false)
+  public void updateUserEmailTest(){
+    userService.updateUserEmail(4L,"wangwu@qq.com");
   }
 
 }

@@ -24,4 +24,6 @@ public interface IUserService {
 
   UserDTO saveOrUpdateUser(UserDTO userDTO);
 
+  void updateUserEmail(Long id ,String email);
+
 }

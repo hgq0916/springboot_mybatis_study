@@ -82,24 +82,29 @@ public class UserServiceImpl implements IUserService {
   }
 
   private User findUserEntityById(Long id) {
-    UserExample example = new UserExample();
+    //方式一：
+    /*UserExample example = new UserExample();
     Criteria criteria = example.createCriteria();
     criteria.andIdEqualTo(id);
     List<User> users = userMapper.selectByExample(example);
     if(users != null && users.size()>0) {
       User user = users.get(0);
       return user;
-    }
-    return null;
+    }*/
+    //方式二 ：
+    return userMapper.selectById(id);
   }
 
   @Override
   public void deleteUserById(Long id) {
     UserDTO userDTO = findUserById(id);
     if(userDTO == null) throw new RuntimeException("用户不存在");
-    UserExample example = new UserExample();
+    //方式一:
+    /*UserExample example = new UserExample();
     example.createCriteria().andIdEqualTo(id);
-    userMapper.deleteByExample(example);
+    userMapper.deleteByExample(example);*/
+    //方式二:
+    userMapper.deleteById(id);
   }
 
   @Override
@@ -118,7 +123,10 @@ public class UserServiceImpl implements IUserService {
       //保存
       user.setCreateDate(new Date());
       user.setModifyDate(new Date());
-      userMapper.insert(user);
+      //方式一：
+      //userMapper.insert(user);
+      //方式二：
+      userMapper.addUser(user);
     }else {
       //更新
       User userOld = findUserEntityById(user.getId());
@@ -138,6 +146,13 @@ public class UserServiceImpl implements IUserService {
     }
 
     return convertEntityToDto(user);
+  }
+
+  @Override
+  public void updateUserEmail(Long id, String email) {
+    User user = userMapper.selectById(id);
+    if(user == null) throw new RuntimeException("user not found");
+    userMapper.updateUserEmail(id,email);
   }
 
   private User convertDtoToEntity(UserDTO userDTO) {
