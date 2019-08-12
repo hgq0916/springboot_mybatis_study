@@ -157,6 +157,12 @@ public class UserServiceImpl implements IUserService {
     userMapper.updateUserEmail(id,email);
   }
 
+  @Override
+  public int updateMobileByUserId(Long id, String mobile) {
+
+    return userMapper.updateMobileByUserId(id,mobile);
+  }
+
   private User convertDtoToEntity(UserDTO userDTO) {
     Assert.notNull(userDTO,"userDTO cannot be null");
     return User.builder()

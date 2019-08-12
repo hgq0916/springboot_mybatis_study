@@ -26,4 +26,6 @@ public interface IUserService {
 
   void updateUserEmail(Long id ,String email);
 
+  int updateMobileByUserId(Long id,String mobile);
+
 }

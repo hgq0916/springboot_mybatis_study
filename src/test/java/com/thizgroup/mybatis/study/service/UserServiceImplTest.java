@@ -108,4 +108,10 @@ public class UserServiceImplTest {
     userService.updateUserEmail(4L,"wangwu@qq.com");
   }
 
+  @Test
+  //@Rollback(value = false)
+  public void updateMobileByUserId(){
+    System.out.println("affect counts:"+userService.updateMobileByUserId(4L,"15134567890"));
+  }
+
 }
