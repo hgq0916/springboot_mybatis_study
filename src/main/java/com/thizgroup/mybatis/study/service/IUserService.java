@@ -1,5 +1,10 @@
 package com.thizgroup.mybatis.study.service;
 
+import com.thizgroup.mybatis.study.dto.PageBean;
+import com.thizgroup.mybatis.study.dto.PageRequest;
+import com.thizgroup.mybatis.study.dto.UserDTO;
+import java.util.List;
+
 /**
  * @author gangquan.hu
  * @Package: com.thizgroup.mybatis.study.service.IUserService
@@ -8,6 +13,8 @@ package com.thizgroup.mybatis.study.service;
  */
 public interface IUserService {
 
+  List<UserDTO> findAll(UserDTO searchDTO);
 
+  PageBean<UserDTO> findUserListByPage(UserDTO searchDTO, PageRequest pageRequest);
 
 }
