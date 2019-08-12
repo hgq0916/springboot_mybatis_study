@@ -10,7 +10,6 @@ import com.thizgroup.mybatis.study.entity.UserExample.Criteria;
 import com.thizgroup.mybatis.study.mapper.UserMapper;
 import com.thizgroup.mybatis.study.service.IUserService;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,11 +30,6 @@ public class UserServiceImpl implements IUserService {
 
   @Autowired
   private UserMapper userMapper;
-
- /* @Override
-  public List<UserDTO> findAll(UserDTO searchDTO) {
-    findAll(searchDTO);
-  }*/
 
   @Override
   public List<UserDTO> findAll(UserDTO searchDTO, Sorter... sorters) {
