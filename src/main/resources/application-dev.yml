@@ -11,7 +11,7 @@ spring:
 mybatis:
   mapper-locations: classpath:mappers/*Mapper.xml
   type-aliases-package: com.thizgroup.mybatis.study.entity
-  config-location: classpath:mybatis-config.xml
+  #config-location: classpath:mybatis-config.xml
 
 pagehelper:
   helper-dialect: mysql #数据库方言

@@ -2,6 +2,7 @@ package com.thizgroup.mybatis.study.service;
 
 import com.thizgroup.mybatis.study.dto.PageBean;
 import com.thizgroup.mybatis.study.dto.PageRequest;
+import com.thizgroup.mybatis.study.dto.Sorter;
 import com.thizgroup.mybatis.study.dto.UserDTO;
 import java.util.List;
 
@@ -13,7 +14,7 @@ import java.util.List;
  */
 public interface IUserService {
 
-  List<UserDTO> findAll(UserDTO searchDTO);
+  List<UserDTO> findAll(UserDTO searchDTO, Sorter ...sorters);
 
   PageBean<UserDTO> findUserListByPage(UserDTO searchDTO, PageRequest pageRequest);
 

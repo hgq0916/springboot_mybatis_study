@@ -2,6 +2,7 @@ package com.thizgroup.mybatis.study.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.thizgroup.mybatis.study.dto.PageBean;
+import com.thizgroup.mybatis.study.dto.Sorter;
 import com.thizgroup.mybatis.study.dto.UserDTO;
 import com.thizgroup.mybatis.study.entity.User;
 import com.thizgroup.mybatis.study.entity.UserExample;
@@ -9,6 +10,7 @@ import com.thizgroup.mybatis.study.entity.UserExample.Criteria;
 import com.thizgroup.mybatis.study.mapper.UserMapper;
 import com.thizgroup.mybatis.study.service.IUserService;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,8 +32,13 @@ public class UserServiceImpl implements IUserService {
   @Autowired
   private UserMapper userMapper;
 
-  @Override
+ /* @Override
   public List<UserDTO> findAll(UserDTO searchDTO) {
+    findAll(searchDTO);
+  }*/
+
+  @Override
+  public List<UserDTO> findAll(UserDTO searchDTO, Sorter... sorters) {
     UserExample example = new UserExample();
     if(searchDTO != null){
       Criteria criteria = example.createCriteria();
@@ -40,7 +47,14 @@ public class UserServiceImpl implements IUserService {
       }
     }
     //排序
-    example.setOrderByClause("create_date desc");
+    if(sorters != null && sorters.length>0){
+      StringBuffer orderString = new StringBuffer();
+      for(Sorter sorter:sorters){
+        orderString.append(" ").append(sorter.toString()).append(" ");
+      }
+      example.setOrderByClause(orderString.toString());
+    }
+
     List<User> userList = userMapper.selectByExample(example);
     userList = userList == null ? new ArrayList<>() : userList;
     List<UserDTO> userDTOS = userList.stream().map(
@@ -64,7 +78,7 @@ public class UserServiceImpl implements IUserService {
   public PageBean<UserDTO> findUserListByPage(UserDTO searchDTO, com.thizgroup.mybatis.study.dto.PageRequest pageRequest) {
     com.github.pagehelper.Page<User> startPage = PageHelper
         .startPage(pageRequest.getPageNumber(), pageRequest.getPageSize(), true);
-    List<UserDTO> userDTOS = findAll(searchDTO);
+    List<UserDTO> userDTOS = findAll(searchDTO,pageRequest.getSorterList().toArray(new Sorter[]{}));
 
     PageBean<UserDTO> page = new PageBean<>(userDTOS);
     page.setPageNumber(startPage.getPageNum());

@@ -3,6 +3,8 @@ package com.thizgroup.mybatis.study.service;
 import com.thizgroup.mybatis.study.MybatisStudyApplication;
 import com.thizgroup.mybatis.study.dto.PageBean;
 import com.thizgroup.mybatis.study.dto.PageRequest;
+import com.thizgroup.mybatis.study.dto.Sorter;
+import com.thizgroup.mybatis.study.dto.Sorter.Order;
 import com.thizgroup.mybatis.study.dto.UserDTO;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +43,8 @@ public class UserServiceImplTest {
   public void findUserListByPageTest(){
     UserDTO userDTO = new UserDTO();
     //userDTO.setName("张");
-    PageBean<UserDTO> userListByPage = userService.findUserListByPage(userDTO, PageRequest.of(1, 5));
+    PageBean<UserDTO> userListByPage = userService.findUserListByPage(userDTO,
+        PageRequest.of(1, 5,Sorter.of("create_date", Order.ASC)));
     System.out.println("总记录数："+userListByPage.getTotalCount());
     System.out.println("总页数:"+userListByPage.getTotalPages());
     System.out.println("页码："+userListByPage.getPageNumber());

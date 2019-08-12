@@ -1,6 +1,7 @@
 package com.thizgroup.mybatis.study.dto;
 
 
+import lombok.Getter;
 import org.springframework.util.Assert;
 
 /**
@@ -9,11 +10,16 @@ import org.springframework.util.Assert;
  * @Description: TODO
  * @date 2019/8/12 13:12
  */
+@Getter
 public class Sorter {
 
   private final String name;
 
   private final Order order;
+
+  public String toString(){
+    return this.name+" "+order.name();
+  }
 
   private Sorter(String name,Sorter.Order order){
     Assert.notNull(name,"name cannot be null");
