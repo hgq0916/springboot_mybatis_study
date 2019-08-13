@@ -10,6 +10,7 @@ import com.thizgroup.mybatis.study.dto.UserDTO;
 import com.thizgroup.mybatis.study.utils.DateUtils;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -118,6 +119,13 @@ public class UserServiceImplTest {
   public void findUserDTOByUserId(){
     UserDTO userDTO = userService.findUserDTOByUserId(4L);
     System.out.println(userDTO);
+  }
+
+  @Test
+  //@Mapkey用法
+  public void findUserDTOMapByUserId(){
+    Map<Long, UserDTO> userDTOMap = userService.findUserDTOMapByUserId(4L);
+    System.out.println(userDTOMap);
   }
 
 }

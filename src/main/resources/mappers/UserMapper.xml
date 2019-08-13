@@ -232,6 +232,14 @@
     where u.id = #{id}
   </select>
 
+  <select id="findUserDTOMapByUserId" parameterType="Long" resultMap="UserDTOMap">
+    select u.id,u.name,u.create_date,
+    a.id address_id,a.country
+    from tb_user u
+    left join tb_address a on u.address_id = a.id
+    where u.id = #{id}
+  </select>
+
   <resultMap id="UserDTOMap" type="com.thizgroup.mybatis.study.dto.UserDTO">
     <id property="id" column="id" javaType="Long" jdbcType="BIGINT"/>
     <result property="name" column="name" javaType="String" jdbcType="VARCHAR"/>

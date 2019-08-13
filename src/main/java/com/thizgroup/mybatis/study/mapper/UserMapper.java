@@ -4,9 +4,11 @@ import com.thizgroup.mybatis.study.dto.UserDTO;
 import com.thizgroup.mybatis.study.entity.User;
 import com.thizgroup.mybatis.study.entity.UserExample;
 import java.util.List;
+import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.MapKey;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -56,6 +58,9 @@ public interface UserMapper {
     int updateMobileByUserId(@Param("id") Long id,@Param("mobile") String mobile);
 
     UserDTO findUserDTOByUserId(@Param("id") Long id);
+
+    @MapKey("id")
+    Map<Long,UserDTO> findUserDTOMapByUserId(@Param("id") Long id);
 
     class UserMapperProvider {
 

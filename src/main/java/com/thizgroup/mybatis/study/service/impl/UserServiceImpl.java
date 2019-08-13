@@ -14,6 +14,7 @@ import com.thizgroup.mybatis.study.service.IUserService;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -167,6 +168,11 @@ public class UserServiceImpl implements IUserService {
   public UserDTO findUserDTOByUserId(Long id) {
 
     return userMapper.findUserDTOByUserId(id);
+  }
+
+  @Override
+  public Map<Long, UserDTO> findUserDTOMapByUserId(Long id) {
+    return userMapper.findUserDTOMapByUserId(id);
   }
 
   private User convertDtoToEntity(UserDTO userDTO) {

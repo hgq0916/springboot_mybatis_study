@@ -5,6 +5,7 @@ import com.thizgroup.mybatis.study.dto.PageRequest;
 import com.thizgroup.mybatis.study.dto.Sorter;
 import com.thizgroup.mybatis.study.dto.UserDTO;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author gangquan.hu
@@ -29,5 +30,7 @@ public interface IUserService {
   int updateMobileByUserId(Long id,String mobile);
 
   UserDTO findUserDTOByUserId(Long id);
+
+  Map<Long,UserDTO> findUserDTOMapByUserId(Long id);
 
 }
